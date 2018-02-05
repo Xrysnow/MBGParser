@@ -30,8 +30,19 @@ function mbg.Motion(T)
     return Template(ret, T)
 end
 
+function mbg.MotionWithPosition(T, U)
+    return {
+        Motion   = mbg.Motion(T),
+        Position = mbg.Position(U)
+    }
+end
+
 function mbg.ValueWithRand()
     return { BaseValue = 0, RandValue = 0 }
+end
+
+function mbg.Life()
+    return { Begin = 0, LifeTime = 0, }
 end
 
 function mbg.Color()

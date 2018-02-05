@@ -7,7 +7,6 @@ local function _EventGroup()
         Name              = '',
         Interval          = 0,
         IntervalIncrement = 0,
-        ---public List{Event}
         Events            = {},
     }
 end

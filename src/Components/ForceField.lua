@@ -7,8 +7,7 @@ local function _ForceField()
         ['ID']      = 0,
         ['层ID']     = 0,
         ['位置坐标']    = mbg.Position(),
-        ['起始']      = 0,
-        ['持续']      = 0,
+        ['生命']      = mbg.Life(),
         ['半宽']      = 0,
         ['半高']      = 0,
         ['启用圆形']    = false,
@@ -38,12 +37,14 @@ function mbg.ForceField.ParseFrom(content)
     f['层ID'] = mbg.ReadUInt(content)
     f['位置坐标'].X = mbg.ReadDouble(content)
     f['位置坐标'].Y = mbg.ReadDouble(content)
-    f['起始'] = mbg.ReadUInt(content)
-    f['持续'] = mbg.ReadUInt(content)
+
+    f['生命'].Begin = mbg.ReadUInt(content)
+    f['生命'].LifeTime = mbg.ReadUInt(content)
+
     f['半宽'] = mbg.ReadDouble(content)
     f['半高'] = mbg.ReadDouble(content)
     f['启用圆形'] = mbg.ReadBool(content)
-    f['类型'] = --[[(mbg.ControlType)]]mbg.ReadUInt(content)
+    f['类型'] = mbg.ReadUInt(content)
     f['控制ID'] = mbg.ReadUInt(content)
     f['运动'].Speed.BaseValue = mbg.ReadDouble(content)
     f['运动'].SpeedDirection.BaseValue = mbg.ReadDouble(content)

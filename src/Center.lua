@@ -1,7 +1,5 @@
 
 
-mbg        = mbg or {}
-
 mbg.Center = {
     Position = mbg.Position(),
     Motion   = mbg.Motion(),
