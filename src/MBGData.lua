@@ -1,4 +1,4 @@
-
+mbg = {}
 
 mbg.MBGData = {
     Version      = '',
