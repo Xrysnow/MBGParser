@@ -1,17 +1,21 @@
+---
+--- Center.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.Center = {
-    Position = mbg.Position(),
-    Motion   = mbg.Motion(),
-    Events   = {}
-}
+---@class mbg.Center
+local Center = {}
+mbg.Center   = Center
 
 local function _Center()
-    local ret = {
-        Position = mbg.Position(),
-        Motion   = mbg.Motion(),
-        Events   = {}
-    }
+    ---@type mbg.Center
+    local ret    = {}
+    ret.Position = mbg.Position()
+    ret.Motion   = mbg.Motion()
+    ---@type mbg.Event[]
+    ret.Events   = {}
     return ret
 end
 
@@ -20,9 +24,12 @@ local mt = {
         return _Center()
     end
 }
-setmetatable(mbg.Center, mt)
+setmetatable(Center, mt)
 
-function mbg.Center.ParseFromContent(content)
+---ParseFromContent
+---@param content String
+---@return mbg.Center
+function Center.ParseFromContent(content)
     if content:equalto("False") then
         return nil
     else
@@ -45,3 +52,4 @@ function mbg.Center.ParseFromContent(content)
         return center
     end
 end
+

@@ -1,23 +1,32 @@
+---
+--- Mask.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.Mask = {}
+---@class mbg.Mask
+local Mask = {}
+mbg.Mask   = Mask
 
 local function _Mask()
-    local ret = {
-        ['ID']     = 0,
-        ['层ID']    = 0,
-        ['绑定状态']   = mbg.BindState(),
-        ['位置坐标']   = mbg.Position(),
-        ['生命']     = mbg.Life(),
-        ['半宽']     = 0,
-        ['半高']     = 0,
-        ['启用圆形']   = false,
-        ['类型']     = mbg.ControlType.All,
-        ['控制ID']   = 0,
-        ['运动']     = mbg.MotionWithPosition(mbg.ValueWithRand),
-        ['发射器事件组'] = {},
-        ['子弹事件组']  = {},
-    }
+    ---@type mbg.Mask
+    local ret     = {}
+    ret['ID']     = 0
+    ret['层ID']    = 0
+    ret['绑定状态']   = mbg.BindState()
+    ret['位置坐标']   = mbg.Position()
+    ret['生命']     = mbg.Life()
+    ret['半宽']     = 0
+    ret['半高']     = 0
+    ret['启用圆形']   = false
+    ret['类型']     = mbg.ControlType.All
+    ret['控制ID']   = 0
+    ret['运动']     = mbg.MotionWithPosition(mbg.ValueWithRand)
+    ---@type mbg.EventGroup[]
+    ret['发射器事件组'] = {}
+    ---@type mbg.EventGroup[]
+    ret['子弹事件组']  = {}
     return ret
 end
 
@@ -26,9 +35,13 @@ local mt = {
         return _Mask()
     end
 }
-setmetatable(mbg.Mask, mt)
+setmetatable(Mask, mt)
 
-function mbg.Mask.ParseFrom(content, layer)
+---ParseFrom
+---@param content String
+---@param layer mbg.Layer
+---@return mbg.Mask,fun()
+function Mask.ParseFrom(content, layer)
     local tmp                             = {}
     local m                               = mbg.Mask()
     m['ID']                               = mbg.ReadUInt(content)
@@ -43,7 +56,7 @@ function mbg.Mask.ParseFrom(content, layer)
     m['半高']                               = mbg.ReadDouble(content)
     m['启用圆形']                             = mbg.ReadBool(content)
 
-    m['类型']                               = mbg.ReadUInt(content)
+    m['类型']                               = --[[mbg.ControlType]]mbg.ReadUInt(content)
     m['控制ID']                             = mbg.ReadUInt(content)
 
     m['运动'].Motion.Speed

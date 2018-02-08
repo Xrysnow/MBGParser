@@ -1,8 +1,18 @@
+---
+--- ActionHelper.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.ActionHelper = {}
+---@class mbg.ActionHelper
+local ActionHelper = {}
+mbg.ActionHelper = ActionHelper
 
-function mbg.ActionHelper.ParseFrom(c)
+---ParseFrom
+---@param c String
+---@return mbg.IAction
+function ActionHelper.ParseFrom(c)
     if c:contains('变化到') or c:contains('增加') or c:contains('减少') then
         return mbg.DataOperateAction.ParseFrom(c)
     else
@@ -16,7 +26,10 @@ local action_op = {
     ['减少']  = mbg.OperatorType.Subtraction,
 }
 
-function mbg.ActionHelper.ParseFirstSentence(firstSentence, action)
+---ParseFirstSentence
+---@param firstSentence String
+---@param action mbg.IAction
+function ActionHelper.ParseFirstSentence(firstSentence, action)
     local pos1 = -1
     local pos2
     for k, v in pairs(action_op) do

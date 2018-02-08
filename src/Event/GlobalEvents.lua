@@ -1,20 +1,28 @@
+---
+--- GlobalEvents.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.GlobalEvents = {}
+---@class mbg.GlobalEvents
+local GlobalEvents={}
+mbg.GlobalEvents = GlobalEvents
 
 local function _GlobalEvents()
-    return {
-        Frame          = 0,
-        JumpEnabled    = false,
-        JumpTarget     = 0,
-        JumpTimes      = 0,
-        VibrateEnabled = false,
-        VibrateForce   = 0,
-        VibrateTime    = 0,
-        SleepEnabled   = false,
-        SleepTime      = 0,
-        SleepType      = 0,
-    }
+    ---@type mbg.GlobalEvents
+    local ret={}
+    ret.Frame          = 0
+    ret.JumpEnabled    = false
+    ret.JumpTarget     = 0
+    ret.JumpTimes      = 0
+    ret.VibrateEnabled = false
+    ret.VibrateForce   = 0
+    ret.VibrateTime    = 0
+    ret.SleepEnabled   = false
+    ret.SleepTime      = 0
+    ret.SleepType      = 0
+    return ret
 end
 
 local mt = {
@@ -22,15 +30,18 @@ local mt = {
         return _GlobalEvents()
     end
 }
-setmetatable(mbg.GlobalEvents, mt)
+setmetatable(GlobalEvents, mt)
 
-mbg.GlobalEvents.SleepModeType = {
+GlobalEvents.SleepModeType = {
     Tween = 0,
     Full  = 1
 }
 
-function mbg.GlobalEvents.ParseFrom(c)
-    local ge = mbg.GlobalEvents()
+---ParseFrom
+---@param c String
+---@return mbg.GlobalEvents
+function GlobalEvents.ParseFrom(c)
+    local ge = GlobalEvents()
     ge.Frame = mbg.ReadUInt(c, '_');
     mbg.ReadString(c, '_');
     mbg.ReadString(c, '_');
@@ -62,11 +73,19 @@ function mbg.GlobalEvents.ParseFrom(c)
     return ge
 end
 
-function mbg.GlobalEvents.ParseEvents(title, _mbg)
+---ParseEvents
+---@param title String
+---@param _mbg String
+---@return table
+function GlobalEvents.ParseEvents(title, _mbg)
     local ret        = {}
-    local soundCount = title:sub(1, title:find('GlobalEvents') - 1):trim():toint()
+    local soundCount = title
+            :sub(1, title:find('GlobalEvents') - 1)
+            :trim()
+            :toint()
     for i = 1, soundCount do
-        table.insert(ret, mbg.GlobalEvents.ParseFrom(_mbg:readline()))
+        table.insert(ret, GlobalEvents.ParseFrom(_mbg:readline()))
     end
     return ret
 end
+

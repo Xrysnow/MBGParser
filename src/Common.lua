@@ -1,4 +1,8 @@
-
+---
+--- Common.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 local function Template(table, T)
     local ret = table
@@ -17,11 +21,13 @@ local function Template(table, T)
     return ret
 end
 
+---@return mbg.Position
 function mbg.Position(T)
     local ret = { X = 0, Y = 0 }
     return Template(ret, T)
 end
 
+---@return mbg.Motion
 function mbg.Motion(T)
     local ret = {
         Speed          = 0, Acceleration = 0,
@@ -30,6 +36,7 @@ function mbg.Motion(T)
     return Template(ret, T)
 end
 
+---@return mbg.MotionWithPosition
 function mbg.MotionWithPosition(T, U)
     return {
         Motion   = mbg.Motion(T),
@@ -37,14 +44,17 @@ function mbg.MotionWithPosition(T, U)
     }
 end
 
+---@return mbg.ValueWithRand
 function mbg.ValueWithRand()
     return { BaseValue = 0, RandValue = 0 }
 end
 
+---@return mbg.Life
 function mbg.Life()
-    return { Begin = 0, LifeTime = 0, }
+    return { Begin = 0, LifeTime = 0 }
 end
 
+---@return mbg.Color
 function mbg.Color()
     return { R = 0, G = 0, B = 0, A = 0 }
 end
@@ -62,3 +72,4 @@ mbg.OperatorType      = {
     Add         = 1,
     Subtraction = 2
 }
+

@@ -1,19 +1,27 @@
+---
+--- ReflexBoard.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.ReflexBoard = {}
+---@class mbg.ReflexBoard
+local ReflexBoard = {}
+mbg.ReflexBoard   = ReflexBoard
 
 local function _ReflexBoard()
-    local ret = {
-        ['ID']    = 0,
-        ['层ID']   = 0,
-        ['位置坐标']  = mbg.Position(),
-        ['生命']    = mbg.Life(),
-        ['长度']    = 0,
-        ['角度']    = 0,
-        ['次数']    = 0,
-        ['运动']    = mbg.Motion(mbg.ValueWithRand),
-        ['碰撞事件组'] = {},
-    }
+    ---@type mbg.ReflexBoard
+    local ret    = {}
+    ret['ID']    = 0
+    ret['层ID']   = 0
+    ret['位置坐标']  = mbg.Position()
+    ret['生命']    = mbg.Life()
+    ret['长度']    = 0
+    ret['角度']    = 0
+    ret['次数']    = 0
+    ret['运动']    = mbg.Motion(mbg.ValueWithRand)
+    ---@type mbg.ReflexBoardAction[]
+    ret['碰撞事件组'] = {}
     return ret
 end
 
@@ -22,9 +30,12 @@ local mt = {
         return _ReflexBoard()
     end
 }
-setmetatable(mbg.ReflexBoard, mt)
+setmetatable(ReflexBoard, mt)
 
-function mbg.ReflexBoard.ParseFrom(content)
+---ParseFrom
+---@param content String
+---@return mbg.ReflexBoard
+function ReflexBoard.ParseFrom(content)
     local r           = mbg.ReflexBoard()
     r['ID']           = mbg.ReadUInt(content)
     r['层ID']          = mbg.ReadUInt(content)

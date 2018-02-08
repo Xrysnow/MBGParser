@@ -1,13 +1,21 @@
+---
+--- ReflexBoardAction.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.ReflexBoardAction = {}
+---@class mbg.ReflexBoardAction:mbg.IAction
+local ReflexBoardAction = {}
+mbg.ReflexBoardAction   = ReflexBoardAction
 
 local function _ReflexBoardAction()
-    return {
-        LValue   = '',
-        RValue   = '',
-        Operator = 0,
-    }
+    ---@type mbg.ReflexBoardAction
+    local ret    = {}
+    ret.LValue   = ''
+    ret.RValue   = ''
+    ret.Operator = 0
+    return ret
 end
 
 local mt = {
@@ -15,15 +23,21 @@ local mt = {
         return _ReflexBoardAction()
     end
 }
-setmetatable(mbg.ReflexBoardAction, mt)
+setmetatable(ReflexBoardAction, mt)
 
-function mbg.ReflexBoardAction.ParseFrom(c)
-    local r = mbg.ReflexBoardAction()
+---ParseFrom
+---@param c String
+---@return mbg.ReflexBoardAction
+function ReflexBoardAction.ParseFrom(c)
+    local r = ReflexBoardAction()
     mbg.ActionHelper.ParseFirstSentence(c, r)
     return r
 end
 
-function mbg.ReflexBoardAction.ParseActions(c)
+---ParseActions
+---@param c String
+---@return mbg.ReflexBoardAction[]
+function ReflexBoardAction.ParseActions(c)
     if not c or c:isempty() then
         return nil
     else
@@ -31,9 +45,10 @@ function mbg.ReflexBoardAction.ParseActions(c)
         local actions = c:split('&')
         for _, v in ipairs(actions) do
             if v ~= '' then
-                table.insert(ret, mbg.ReflexBoardAction.ParseFrom(String(v)))
+                table.insert(ret, ReflexBoardAction.ParseFrom(String(v)))
             end
         end
         return ret
     end
 end
+

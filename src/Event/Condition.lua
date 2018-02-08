@@ -1,34 +1,46 @@
+---
+--- Condition.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.Condition            = {}
+---@class mbg.Condition
+local Condition      = {}
+mbg.Condition        = Condition
+---@class mbg.Condition.Expression
+local Expression     = {}
+Condition.Expression = Expression
 
-mbg.Condition.Expression = {}
-
-local mt_Expression      = {
+local mt_Expression  = {
     __call = function()
-        return {
-            LValue   = '',
-            Operator = 0,
-            RValue   = 0
-        }
+        ---@type mbg.Condition.Expression
+        local ret    = {}
+        ret.LValue   = ''
+        ret.Operator = 0
+        ret.RValue   = 0
+        return ret
     end
 }
-setmetatable(mbg.Condition.Expression, mt_Expression)
+setmetatable(Expression, mt_Expression)
 
-mbg.Condition.Expression.OpType = {
+Expression.OpType = {
     Greater = 0,
     Less    = 1,
     Equals  = 2
 }
 
-function mbg.Condition.Expression.ParseFrom(c)
-    local e = mbg.Condition.Expression()
+---ParseFrom
+---@param c String
+---@return mbg.Condition.Expression
+function Expression.ParseFrom(c)
+    local e = Expression()
     if c:contains('>') then
-        e.Operator = mbg.Condition.Expression.OpType.Greater
+        e.Operator = Expression.OpType.Greater
     elseif c:contains('<') then
-        e.Operator = mbg.Condition.Expression.OpType.Less
+        e.Operator = Expression.OpType.Less
     elseif c:contains('=') then
-        e.Operator = mbg.Condition.Expression.OpType.Equals
+        e.Operator = Expression.OpType.Equals
     else
         error("未能解析表达式")
     end
@@ -38,50 +50,58 @@ function mbg.Condition.Expression.ParseFrom(c)
     return e
 end
 
-mbg.Condition.SecondCondition             = {}
+---@class mbg.Condition.SecondCondition
+local SecondCondition       = {}
+Condition.SecondCondition   = SecondCondition
 
-mbg.Condition.SecondCondition.LogicOpType = {
+SecondCondition.LogicOpType = {
     And = 0,
     Or  = 1
 }
 
-local mt_SecondCondition                  = {
+local mt_SecondCondition    = {
     __call = function()
-        return {
-            LogincOp = 0,
-            Expr     = mbg.Condition.Expression()
-        }
+        ---@type mbg.Condition.SecondCondition
+        local ret    = {}
+        ret.LogincOp = 0
+        ret.Expr     = Expression()
+        return ret
     end
 }
-setmetatable(mbg.Condition.SecondCondition, mt_SecondCondition)
+setmetatable(SecondCondition, mt_SecondCondition)
 
 local mt_Condition = {
     __call = function()
-        return {
-            First  = mbg.Condition.Expression(),
-            Second = mbg.Condition.SecondCondition()
-        }
+        ---@type mbg.Condition
+        local ret  = {}
+        ret.First  = Expression()
+        ret.Second = SecondCondition()
+        return ret
     end
 }
-setmetatable(mbg.Condition, mt_Condition)
+setmetatable(Condition, mt_Condition)
 
-function mbg.Condition.ParseFrom(c)
-    local op = nil
+---ParseFrom
+---@param c String
+---@return mbg.Condition
+function Condition.ParseFrom(c)
+    local op
     if c:contains('且') then
-        op = mbg.Condition.SecondCondition.LogicOpType.And
+        op = SecondCondition.LogicOpType.And
     elseif c:contains('或') then
-        op = mbg.Condition.SecondCondition.LogicOpType.Or
+        op = SecondCondition.LogicOpType.Or
     end
-    local condition = mbg.Condition()
+    local condition = Condition()
     if not op then
-        condition.First  = mbg.Condition.Expression.ParseFrom(c)
+        condition.First  = Expression.ParseFrom(c)
         condition.Second = nil
     else
         local exprs               = c:split('且', '或')
-        condition.First           = mbg.Condition.Expression.ParseFrom(String(exprs[1]))
-        condition.Second          = mbg.Condition.SecondCondition()
+        condition.First           = Expression.ParseFrom(String(exprs[1]))
+        condition.Second          = SecondCondition()
         condition.Second.LogincOp = op
-        condition.Second.Expr     = mbg.Condition.Expression.ParseFrom(String(exprs[2]))
+        condition.Second.Expr     = Expression.ParseFrom(String(exprs[2]))
     end
     return condition
 end
+

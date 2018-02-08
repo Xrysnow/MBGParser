@@ -1,12 +1,22 @@
+---
+--- Event.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.Event = {}
+---@class mbg.Event
+local Event = {}
+mbg.Event   = Event
 
 local function _Event()
-    return {
-        Condition = mbg.Condition(),
-        Action    = nil,
-    }
+    ---@type mbg.Event
+    local ret     = {}
+    ---@type mbg.Condition
+    ret.Condition = nil
+    ---@type mbg.IAction
+    ret.Action    = nil
+    return ret
 end
 
 local mt = {
@@ -14,16 +24,22 @@ local mt = {
         return _Event()
     end
 }
-setmetatable(mbg.Event, mt)
+setmetatable(Event, mt)
 
-function mbg.Event.ParseFrom(c)
-    local e     = mbg.Event()
+---ParseFrom
+---@param c String
+---@return mbg.Event
+function Event.ParseFrom(c)
+    local e     = Event()
     e.Condition = mbg.Condition.ParseFrom(mbg.ReadString(c, '：'))
     e.Action    = mbg.ActionHelper.ParseFrom(c)
     return e
 end
 
-function mbg.Event.ParseEvents(c)
+---ParseEvents
+---@param c String
+---@return mbg.Event[]
+function Event.ParseEvents(c)
     if not c or c:isempty() then
         return nil
     else
@@ -31,7 +47,7 @@ function mbg.Event.ParseEvents(c)
         local events = c:split(';')
         for _, v in pairs(events) do
             if v ~= '' then
-                table.insert(ret, mbg.Event.ParseFrom(String(v)))
+                table.insert(ret, Event.ParseFrom(String(v)))
             end
         end
         return ret

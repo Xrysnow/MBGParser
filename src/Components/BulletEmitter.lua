@@ -1,51 +1,60 @@
+---
+--- BulletEmitter.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
+---@class mbg.BulletEmitter
 local BulletEmitter = {}
 mbg.BulletEmitter   = BulletEmitter
 
 local function _BulletEmitter()
-    local ret = {
-        ['ID']        = 0,
-        ['层ID']       = 0,
-        ['绑定状态']      = mbg.BindState(),
-        ['位置坐标']      = mbg.Position(mbg.ValueWithRand),
-        ['起始']        = 0,
-        ['持续']        = 0,
-        ['生命']        = mbg.Life(),
-        ['发射坐标']      = mbg.Position(),
-        ['半径']        = mbg.ValueWithRand(),
-        ['半径方向']      = mbg.ValueWithRand(),
-        ['半径方向_坐标指定'] = mbg.Position(),
-        ['条数']        = mbg.ValueWithRand(),
-        ['周期']        = mbg.ValueWithRand(),
-        ['发射角度']      = mbg.ValueWithRand(),
-        ['发射角度_坐标指定'] = mbg.Position(),
-        ['范围']        = mbg.ValueWithRand(),
-        ['发射器运动']     = mbg.MotionWithPosition(mbg.ValueWithRand),
-        ['子弹生命']      = 0,
-        ['子弹类型']      = 0,
-        ['宽比']        = 0,
-        ['高比']        = 0,
-        ['子弹颜色']      = mbg.Color(),
-        ['朝向']        = mbg.ValueWithRand(),
-        ['朝向_坐标指定']   = mbg.Position(),
-        ['朝向与速度方向相同'] = false,
-        ['子弹运动']      = mbg.MotionWithPosition(mbg.ValueWithRand),
-        ['横比']        = 0,
-        ['纵比']        = 0,
-        ['雾化效果']      = false,
-        ['消除效果']      = false,
-        ['高光效果']      = false,
-        ['拖影效果']      = false,
-        ['出屏即消']      = false,
-        ['无敌状态']      = false,
-        ['发射器事件组']    = {},
-        ['子弹事件组']     = {},
-        ['遮罩']        = false,
-        ['反弹板']       = false,
-        ['力场']        = false,
-    }
-    ret.Bind  = mbg.BulletEmitter.Bind
+    ---@type mbg.BulletEmitter
+    local ret        = {}
+    ret['ID']        = 0
+    ret['层ID']       = 0
+    ret['绑定状态']      = mbg.BindState()
+    ret['位置坐标']      = mbg.Position(mbg.ValueWithRand)
+    ret['起始']        = 0
+    ret['持续']        = 0
+    ret['生命']        = mbg.Life()
+    ret['发射坐标']      = mbg.Position()
+    ret['半径']        = mbg.ValueWithRand()
+    ret['半径方向']      = mbg.ValueWithRand()
+    ret['半径方向_坐标指定'] = mbg.Position()
+    ret['条数']        = mbg.ValueWithRand()
+    ret['周期']        = mbg.ValueWithRand()
+    ret['发射角度']      = mbg.ValueWithRand()
+    ret['发射角度_坐标指定'] = mbg.Position()
+    ret['范围']        = mbg.ValueWithRand()
+    ret['发射器运动']     = mbg.MotionWithPosition(mbg.ValueWithRand)
+    ret['子弹生命']      = 0
+    ret['子弹类型']      = 0
+    ret['宽比']        = 0
+    ret['高比']        = 0
+    ret['子弹颜色']      = mbg.Color()
+    ret['朝向']        = mbg.ValueWithRand()
+    ret['朝向_坐标指定']   = mbg.Position()
+    ret['朝向与速度方向相同'] = false
+    ret['子弹运动']      = mbg.MotionWithPosition(mbg.ValueWithRand)
+    ret['横比']        = 0
+    ret['纵比']        = 0
+    ret['雾化效果']      = false
+    ret['消除效果']      = false
+    ret['高光效果']      = false
+    ret['拖影效果']      = false
+    ret['出屏即消']      = false
+    ret['无敌状态']      = false
+    ---@type EventGroup[]
+    ret['发射器事件组']    = {}
+    ---@type EventGroup[]
+    ret['子弹事件组']     = {}
+    ret['遮罩']        = false
+    ret['反弹板']       = false
+    ret['力场']        = false
+
+    ret.Bind         = BulletEmitter.Bind
     return ret
 end
 
@@ -54,9 +63,12 @@ local mt = {
         return _BulletEmitter()
     end
 }
-setmetatable(mbg.BulletEmitter, mt)
+setmetatable(BulletEmitter, mt)
 
-function mbg.BulletEmitter.ParseFrom(content, layer)
+---@param content String
+---@param layer mbg.Layer
+---@return mbg.BulletEmitter,fun()
+function BulletEmitter.ParseFrom(content, layer)
     local e     = mbg.BulletEmitter()
     local tmp   = {}
     e['ID']     = mbg.ReadUInt(content)
@@ -193,12 +205,17 @@ function mbg.BulletEmitter.ParseFrom(content, layer)
     return e, binder
 end
 
-function mbg.BulletEmitter:Bind(bindable, depth, relative)
-    return {
-        Child    = bindable,
-        Parent   = self,
-        Depth    = depth,
-        Relative = relative
-    }
+---Bind
+---@param bindable table
+---@param depth boolean
+---@param relative boolean
+---@return mbg.BindState
+function BulletEmitter:Bind(bindable, depth, relative)
+    local ret    = mbg.BindState()
+    ret.Child    = bindable
+    ret.Parent   = self
+    ret.Depth    = depth
+    ret.Relative = relative
+    return ret
 end
 

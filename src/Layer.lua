@@ -1,18 +1,30 @@
+---
+--- Layer.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.Layer = {}
+---@class mbg.Layer
+local Layer = {}
+mbg.Layer = Layer
 
 local function _Layer()
-    local ret       = {
-        Name           = '',
-        Life           = mbg.Life(),
-        BulletEmitters = {},
-        ReflexBoards   = {},
-        ForceFields    = {},
-        Masks          = {},
-        LazerEmitters  = {},
-    }
-    ret.LoadContent = mbg.Layer.LoadContent
+    ---@type mbg.Layer
+    local ret       = {}
+    ret.Name           = ''
+    ret.Life           = mbg.Life()
+    ---@type mbg.BulletEmitter[]
+    ret.BulletEmitters = {}
+    ---@type mbg.ReflexBoard[]
+    ret.ReflexBoards   = {}
+    ---@type mbg.ForceField[]
+    ret.ForceFields    = {}
+    ---@type mbg.Mask[]
+    ret.Masks          = {}
+    ---@type mbg.LazerEmitter[]
+    ret.LazerEmitters  = {}
+    ret.LoadContent = Layer.LoadContent
     return ret
 end
 
@@ -21,9 +33,16 @@ local mt = {
         return _Layer()
     end
 }
-setmetatable(mbg.Layer, mt)
+setmetatable(Layer, mt)
 
-function mbg.Layer:LoadContent(_mbg,
+---LoadContent
+---@param _mbg String
+---@param bulletEmitterCount number
+---@param lazerEmitterCount number
+---@param maskEmitterCount number
+---@param reflexBoardCount number
+---@param forceFieldCount number
+function Layer:LoadContent(_mbg,
                                bulletEmitterCount,
                                lazerEmitterCount,
                                maskEmitterCount,
@@ -62,7 +81,10 @@ function mbg.Layer:LoadContent(_mbg,
     end
 end
 
-function mbg.Layer:FindBulletEmitterByID(id)
+---FindBulletEmitterByID
+---@param id number
+---@return mbg.BulletEmitter
+function Layer:FindBulletEmitterByID(id)
     for _, i in pairs(self.BulletEmitters) do
         if i.ID == id then
             return i
@@ -71,7 +93,11 @@ function mbg.Layer:FindBulletEmitterByID(id)
     error('找不到子弹发射器: ' .. id)
 end
 
-function mbg.Layer.ParseFrom(content, _mbg)
+---ParseFrom
+---@param content String
+---@param _mbg String
+---@return mbg.Layer
+function Layer.ParseFrom(content, _mbg)
     if content:equalto("empty") then
         return nil
     else

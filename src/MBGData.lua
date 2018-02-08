@@ -1,18 +1,48 @@
+---
+--- MBGData.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.MBGData = {
-    Version      = '',
-    TotalFrame   = 0,
-    Center       = mbg.Center(),
-    Layer1       = mbg.Layer(),
-    Layer2       = mbg.Layer(),
-    Layer3       = mbg.Layer(),
-    Layer4       = mbg.Layer(),
-    Sounds       = {},
-    GlobalEvents = {},
+---@class mbg.MBGData
+local MBGData = {}
+mbg.MBGData   = MBGData
+
+local function _MBGData()
+    ---@type mbg.MBGData
+    local ret              = {}
+    ret.Version            = ''
+    ret.TotalFrame         = 0
+    ret.Center             = mbg.Center()
+    ret.Layer1             = mbg.Layer()
+    ret.Layer2             = mbg.Layer()
+    ret.Layer3             = mbg.Layer()
+    ret.Layer4             = mbg.Layer()
+    ---@type mbg.Sound[]
+    ret.Sounds             = {}
+    ---@type mbg.GlobalEvents[]
+    ret.GlobalEvents       = {}
+
+    ret.ProcessNormalTitle = MBGData.ProcessNormalTitle
+    ret.ProcessNumberTitle = MBGData.ProcessNumberTitle
+    ret.GlobalEvent        = MBGData.GlobalEvent
+
+    return ret
+end
+
+local mt = {
+    __call = function()
+        return _MBGData()
+    end
 }
+setmetatable(MBGData, mt)
 
-function mbg.MBGData:ProcessNormalTitle(title, content, _mbg)
+---ProcessNormalTitle
+---@param title String
+---@param content String
+---@param _mbg String
+function MBGData:ProcessNormalTitle(title, content, _mbg)
     local s = title:tostring()
     if s == 'Center' then
         self.Center = mbg.Center.ParseFromContent(content)
@@ -31,7 +61,10 @@ function mbg.MBGData:ProcessNormalTitle(title, content, _mbg)
     end
 end
 
-function mbg.MBGData:ProcessNumberTitle(title, _mbg)
+---ProcessNumberTitle
+---@param title String
+---@param _mbg String
+function MBGData:ProcessNumberTitle(title, _mbg)
     if title:contains("Sounds") then
         self.Sounds = mbg.Sound.ParseSounds(title, _mbg)
         return true
@@ -42,22 +75,26 @@ function mbg.MBGData:ProcessNumberTitle(title, _mbg)
     return false
 end
 
-function mbg.MBGData:GlobalEvent(title, _mbg)
+function MBGData:GlobalEvent(title, _mbg)
     error('Not implemented.')
 end
 
-function mbg.MBGData.ParseFrom(mbgData)
-    local _mbg = mbgData:copy()
-    local data = mbg.MBGData()
+---ParseFrom
+---@param mbgData String
+---@return mbg.MBGData
+function MBGData.ParseFrom(mbgData)
+    local _mbg   = mbgData:copy()
+    ---@type mbg.MBGData
+    local data   = mbg.MBGData()
     data.Version = _mbg:readline()
 
     if data.Version:tostring() ~= "Crazy Storm Data 1.01" then
-        error("未知版本的CrazyStorm数据："..data.Version:tostring())
+        error("未知版本的CrazyStorm数据：" .. data.Version:tostring())
     end
     while _mbg:peek() ~= -1 do
         local content = _mbg:readline();
         if content and not content:isempty() then
-            local title = mbg.ReadString(content, ':')
+            local title     = mbg.ReadString(content, ':')
 
             local processed = data:ProcessNumberTitle(title, _mbg)
             if not processed then
@@ -68,27 +105,3 @@ function mbg.MBGData.ParseFrom(mbgData)
     return data
 end
 
-local function _MBGData()
-    local ret              = {
-        Version      = '',
-        TotalFrame   = 0,
-        Center       = mbg.Center(),
-        Layer1       = mbg.Layer(),
-        Layer2       = mbg.Layer(),
-        Layer3       = mbg.Layer(),
-        Layer4       = mbg.Layer(),
-        Sounds       = {},
-        GlobalEvents = {},
-    }
-    for k, v in pairs(mbg.MBGData) do
-        ret[k] = v
-    end
-    return ret
-end
-
-local mt = {
-    __call = function()
-        return _MBGData()
-    end
-}
-setmetatable(mbg.MBGData, mt)

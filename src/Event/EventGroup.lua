@@ -1,14 +1,22 @@
+---
+--- EventGroup.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.EventGroup = {}
+---@class mbg.EventGroup
+local EventGroup = {}
+mbg.EventGroup   = EventGroup
 
 local function _EventGroup()
-    return {
-        Name              = '',
-        Interval          = 0,
-        IntervalIncrement = 0,
-        Events            = {},
-    }
+    local ret             = {}
+    ret.Name              = ''
+    ret.Interval          = 0
+    ret.IntervalIncrement = 0
+    ---@type mbg.Event[]
+    ret.Events            = {}
+    return ret
 end
 
 local mt = {
@@ -16,9 +24,12 @@ local mt = {
         return _EventGroup()
     end
 }
-setmetatable(mbg.EventGroup, mt)
+setmetatable(EventGroup, mt)
 
-function mbg.EventGroup.ParseFrom(c)
+---ParseFrom
+---@param c String
+---@return mbg.EventGroup
+function EventGroup.ParseFrom(c)
     local eg             = mbg.EventGroup()
     eg.Name              = mbg.ReadString(c, '|')
     eg.Interval          = mbg.ReadUInt(c, '|')
@@ -27,20 +38,23 @@ function mbg.EventGroup.ParseFrom(c)
     return eg
 end
 
-function mbg.EventGroup.ParseEventGroups(c)
+---ParseEventGroups
+---@param c String
+---@return table
+function EventGroup.ParseEventGroups(c)
     if not c or c:isempty() then
         return nil
     else
         local ret = {}
         local egs = c:split('&')
         SystemLog(c:tostring())
-        SystemLog('#egs='..#egs)
+        SystemLog('#egs=' .. #egs)
         for _, v in ipairs(egs) do
             if v ~= '' then
-                table.insert(ret, mbg.EventGroup.ParseFrom(String(v)))
+                table.insert(ret, EventGroup.ParseFrom(String(v)))
             end
         end
-        SystemLog('ret=\n\n'..stringify(ret))
+        SystemLog('ret=\n\n' .. stringify(ret))
         return ret
     end
 end

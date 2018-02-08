@@ -1,16 +1,24 @@
+---
+--- DataOperateAction.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.DataOperateAction = {}
+---@class mbg.DataOperateAction:mbg.IAction
+local DataOperateAction = {}
+mbg.DataOperateAction   = DataOperateAction
 
 local function _DataOperateAction()
-    return {
-        LValue        = '',
-        TweenTime     = 0,
-        Times         = 0,
-        RValue        = '',
-        TweenFunction = 0,
-        Operator      = 0
-    }
+    ---@type mbg.DataOperateAction
+    local ret         = {}
+    ret.LValue        = ''
+    ret.TweenTime     = 0
+    ret.Times         = 0
+    ret.RValue        = ''
+    ret.TweenFunction = 0
+    ret.Operator      = 0
+    return ret
 end
 
 local mt = {
@@ -18,24 +26,27 @@ local mt = {
         return _DataOperateAction()
     end
 }
-setmetatable(mbg.DataOperateAction, mt)
+setmetatable(DataOperateAction, mt)
 
-mbg.DataOperateAction.TweenFunctionType = {
+DataOperateAction.TweenFunctionType = {
     Proportional = 0,
     Fixed        = 1,
-    Sin          = 2
+    Sin          = 2,
 }
+local TweenFunctionType             = DataOperateAction.TweenFunctionType
 
-mbg.DataOperateAction.OperatorType      = {
+DataOperateAction.OperatorType      = {
     ChangeTo    = 0,
     Add         = 1,
-    Subtraction = 2
+    Subtraction = 2,
 }
 
-local TweenFunctionType                 = mbg.DataOperateAction.TweenFunctionType
-
-function mbg.DataOperateAction.ParseFrom(c)
+---ParseFrom
+---@param c String
+---@return mbg.DataOperateAction
+function DataOperateAction.ParseFrom(c)
     local sents = c:split('，')
+    ---@type mbg.DataOperateAction
     local d     = mbg.DataOperateAction()
     mbg.ActionHelper.ParseFirstSentence(String(sents[1]), d)
     local str = sents[2]

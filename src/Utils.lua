@@ -1,5 +1,14 @@
+---
+--- Utils.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
+---ReadString
+---@param line String
+---@param optional splitter string
+---@return String
 function mbg.ReadString(line, splitter)
     splitter = splitter or ','
     if line:isempty() then
@@ -15,26 +24,37 @@ function mbg.ReadString(line, splitter)
     end
 end
 
+---@param line String
+---@param optional splitter string
 function mbg.ReadBool(line, splitter)
     local s = mbg.ReadString(line, splitter):tostring()
     assert(s == 'True' or s == 'true' or s == 'False' or s == 'false')
     return s == 'True' or s == 'true'
 end
 
+---@param line String
+---@param optional splitter string
 function mbg.ReadUInt(line, splitter)
     local ret = math.floor(mbg.ReadString(line, splitter):tonumber())
     assert(ret >= 0)
     return ret
 end
 
+---@param line String
+---@param optional splitter string
 function mbg.ReadInt(line, splitter)
     return math.floor(mbg.ReadString(line, splitter):tonumber())
 end
 
+---@param line String
+---@param optional splitter string
 function mbg.ReadDouble(line, splitter)
     return mbg.ReadString(line, splitter):tonumber()
 end
 
+---ReadPosition
+---@param line String
+---@param optional splitter string
 function mbg.ReadPosition(line, splitter)
     splitter      = splitter or ','
     local content = mbg.ReadString(line, splitter)

@@ -1,13 +1,20 @@
+---
+--- Sound.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.Sound = {}
+---@class mbg.Sound
+local Sound = {}
+mbg.Sound = Sound
 
 local function _Sound()
-    local ret = {
-        BulletType = 0,
-        FileName   = String(),
-        Volume     = 0,
-    }
+    ---@type mbg.Sound
+    local ret = {}
+    ret.BulletType = 0
+    ret.FileName   = String()
+    ret.Volume     = 0
     return ret
 end
 
@@ -16,8 +23,11 @@ local mt = {
         return _Sound()
     end
 }
-setmetatable(mbg.Sound, mt)
+setmetatable(Sound, mt)
 
+---ParseFrom
+---@param c String
+---@return mbg.Sound
 local function ParseFrom(c)
     local s      = mbg.Sound()
     s.BulletType = mbg.ReadUInt(c, '_')
@@ -29,7 +39,11 @@ local function ParseFrom(c)
     return s
 end
 
-function mbg.Sound.ParseSounds(title, _mbg)
+---ParseSounds
+---@param title String
+---@param _mbg String
+---@return mbg.Sound[]
+function Sound.ParseSounds(title, _mbg)
     local soundCount = title:sub(1, title:find("Sounds") - 1):trim():toint();
     local ret = {}
     for i = 1, soundCount do
@@ -37,3 +51,4 @@ function mbg.Sound.ParseSounds(title, _mbg)
     end
     return ret
 end
+

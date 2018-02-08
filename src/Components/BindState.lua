@@ -1,14 +1,22 @@
+---
+--- BindState.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.BindState = {}
+---@class mbg.BindState
+local BindState
+mbg.BindState = BindState
 
 local function _BindState()
-    return {
-        Parent   = mbg.BulletEmitter(),
-        Child    = {},
-        Depth    = false,
-        Relative = false,
-    }
+    ---@type mbg.BindState
+    local ret    = {}
+    ret.Parent   = nil
+    ret.Child    = nil
+    ret.Depth    = false
+    ret.Relative = false
+    return ret
 end
 
 local mt = {
@@ -16,5 +24,5 @@ local mt = {
         return _BindState()
     end
 }
-setmetatable(mbg.BulletEmitter, mt)
+setmetatable(BindState, mt)
 

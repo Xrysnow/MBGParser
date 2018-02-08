@@ -1,12 +1,19 @@
+---
+--- CommandAction.lua
+---
+--- Copyright (C) 2018 Xrysnow. All rights reserved.
+---
 
 
-mbg.CommandAction = {}
+---@class mbg.CommandAction:mbg.IAction
+local CommandAction = {}
+mbg.CommandAction = CommandAction
 
 local function _CommandAction()
-    local ret = {
-        Command   = String(),
-        Arguments = {}
-    }
+    ---@type mbg.CommandAction
+    local ret = {}
+    ret.Command   = String()
+    ret.Arguments = {}
     return ret
 end
 
@@ -15,9 +22,12 @@ local mt = {
         return _CommandAction()
     end
 }
-setmetatable(mbg.CommandAction, mt)
+setmetatable(CommandAction, mt)
 
-function mbg.CommandAction.ParseFrom(c)
+---ParseFrom
+---@param c String
+---@return mbg.CommandAction
+function CommandAction.ParseFrom(c)
     local s     = c:split('，')
     local a     = mbg.CommandAction()
     a.Arguments = nil
@@ -30,3 +40,4 @@ function mbg.CommandAction.ParseFrom(c)
     end
     return a
 end
+
