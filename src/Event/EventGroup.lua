@@ -47,14 +47,11 @@ function EventGroup.ParseEventGroups(c)
     else
         local ret = {}
         local egs = c:split('&')
-        SystemLog(c:tostring())
-        SystemLog('#egs=' .. #egs)
         for _, v in ipairs(egs) do
             if v ~= '' then
                 table.insert(ret, EventGroup.ParseFrom(String(v)))
             end
         end
-        SystemLog('ret=\n\n' .. stringify(ret))
         return ret
     end
 end

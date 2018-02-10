@@ -6,8 +6,8 @@
 
 
 ---@class mbg.BindState
-local BindState
-mbg.BindState = BindState
+local BindState = {}
+mbg.BindState   = BindState
 
 local function _BindState()
     ---@type mbg.BindState
